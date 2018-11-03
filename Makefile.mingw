@@ -1,0 +1,49 @@
+# Dll & Source Files:
+#     FFmpeg from https://ffmpeg.zeranoe.com/builds/win32/dev/ into mtn's lib/windows directory
+#     artifact libgd  from https://ci.appveyor.com/project/imazen/gd-libgd into mtn's lib/windows directory
+#   cd src
+#   run> make -f Makefile.mingw
+#
+#
+# mtn's lib directory structure should look like this
+#|-- lib
+#|   `-- windows
+#|       |-- bin
+#|       |   |-- avcodec-57.dll
+#|       |   |-- avformat-57.dll
+#|       |   |-- liblibgd.dll
+#|       |   `-- ...
+#|       |-- include
+#|       |   |-- gd.h
+#|       |   |-- gd_io.h
+#|       |   |-- gdfx.h
+#|       |   |-- libavcodec
+#|       |   |   |-- avcodec.h
+#|       |   |   |-- avdct.h
+#|       |   |   |-- ...
+#|       |   |-- libswresample
+#|       |   |   |-- swresample.h
+#|       |   |   `-- version.h
+#|       |   `-- ...
+#|       |-- lib
+#|       |   |-- avcodec-57.def
+#|       |   |-- avcodec.lib
+#|       |   |-- avdevice-57.def
+#|       |   |-- avdevice.lib
+#|       |   |-- ...
+
+CC=i686-w64-mingw32-gcc
+CFLAGS=-Wall -DWIN32 -O3
+OUT=../bin
+LDFLAGS=-L../lib/windows/lib
+INCLUDE=-I../lib/windows/include
+LIBS=-llibgd -lavutil -lavdevice -lavformat -lavcodec  -lswscale -lm
+
+mtn: mtn.c outdir
+	$(CC) -o $(OUT)/mtn.exe mtn.c $(CFLAGS) $(LDFLAGS) $(INCLUDE) $(LIBS)
+
+outdir:
+	mkdir -p $(OUT)
+	
+clean:
+	rm -f $(OUT)/mtn.exe
