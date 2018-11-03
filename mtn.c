@@ -198,6 +198,11 @@ int gb_X_filename_use_full = GB_X_FILENAME_USE_FULL; // use full input filename 
 char *gb_o_suffix = GB_O_SUFFIX;
 #define GB_O_OUTDIR NULL
 char *gb_O_outdir = GB_O_OUTDIR;
+#ifdef WIN32
+    #define GB_P_PAUSE 0
+#else
+    #define GB_P_PAUSE 0
+#endif
 int gb_p_pause = GB_P_PAUSE; // pause before exiting; 1 pause; 0 dont pause
 #define GB_P_DONTPAUSE 0
 int gb_P_dontpause = GB_P_DONTPAUSE; // dont pause; overide gb_p_pause
