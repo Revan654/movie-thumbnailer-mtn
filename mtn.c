@@ -199,7 +199,7 @@ char *gb_o_suffix = GB_O_SUFFIX;
 #define GB_O_OUTDIR NULL
 char *gb_O_outdir = GB_O_OUTDIR;
 #ifdef WIN32
-    #define GB_P_PAUSE 0
+    #define GB_P_PAUSE 1
 #else
     #define GB_P_PAUSE 0
 #endif
@@ -208,7 +208,7 @@ int gb_p_pause = GB_P_PAUSE; // pause before exiting; 1 pause; 0 dont pause
 int gb_P_dontpause = GB_P_DONTPAUSE; // dont pause; overide gb_p_pause
 #define GB_Q_QUIET 0
 int gb_q_quiet = GB_Q_QUIET; // 1 on; 0 off
-#define GB_R_ROW 0
+#define GB_R_ROW 6
 int gb_r_row = GB_R_ROW; // 0 = as many rows as needed
 #define GB_S_STEP 120
 int gb_s_step = GB_S_STEP; // less than 0 = every frame; 0 = step evenly to get column x row
@@ -3008,8 +3008,7 @@ void usage()
     av_log(NULL, AV_LOG_ERROR, "  -c %d : # of column\n", GB_C_COLUMN);
     av_log(NULL, AV_LOG_ERROR, "  -C %d : cut movie and thumbnails not more than the specified seconds; <=0:off\n", GB_C_CUT);
     av_log(NULL, AV_LOG_ERROR, "  -d #: recursion depth; 0:immediate children files only\n");
-    av_log(NULL, AV_LOG_ERROR, "  -D %d : edge detection; 0:off >0:on; higher detects more; try -D4 -D6 or -D8\n", gb_D_edge);
-    //av_log(NULL, AV_LOG_ERROR, "  -e : to be done\n"); // extension of movie files
+    av_log(NULL, AV_LOG_ERROR, "  -D %d : edge detection; 0:off >0:on; higher detects more; try -D4 -D6 or -D8\n", gb_D_edge);   
     av_log(NULL, AV_LOG_ERROR, "  -E %.1f : omit this seconds at the end\n", GB_E_END);
     av_log(NULL, AV_LOG_ERROR, "  -f %s : font file; use absolute path if not in usual places\n", GB_F_FONTNAME);
     av_log(NULL, AV_LOG_ERROR, "  -F RRGGBB:size[:font:RRGGBB:RRGGBB:size] : font format [time is optional]\n     info_color:info_size[:time_font:time_color:time_shadow:time_size]\n");
@@ -3019,7 +3018,7 @@ void usage()
     av_log(NULL, AV_LOG_ERROR, "  -i : info text off\n");
     av_log(NULL, AV_LOG_ERROR, "  -I : save individual shots too\n");
     av_log(NULL, AV_LOG_ERROR, "  -j %d : jpeg quality\n", GB_J_QUALITY);
-    av_log(NULL, AV_LOG_ERROR, "  -k RRGGBB : background color (in hex)\n"); // backgroud color
+    av_log(NULL, AV_LOG_ERROR, "  -k RRGGBB : background color (in hex)\n"); 
     av_log(NULL, AV_LOG_ERROR, "  -L info_location[:time_location] : location of text\n     1=lower left, 2=lower right, 3=upper right, 4=upper left\n");
     av_log(NULL, AV_LOG_ERROR, "  -n : run at normal priority\n");
     av_log(NULL, AV_LOG_ERROR, "  -N info_suffix : save info text to a file with suffix\n");
@@ -3044,8 +3043,7 @@ void usage()
     av_log(NULL, AV_LOG_ERROR, "  file_or_dirX\n       name of the movie file or directory containing movie files\n\n");
     av_log(NULL, AV_LOG_ERROR, "Examples:\n");
     av_log(NULL, AV_LOG_ERROR, "  to save thumbnails to file infile%s with default options:\n    %s infile.avi\n", GB_O_SUFFIX, gb_argv0);
-    av_log(NULL, AV_LOG_ERROR, "  to change time step to 65 seconds & change total width to 900:\n    %s -s 65 -w 900 infile.avi\n", gb_argv0);
-    // as of version 0.60, -s 0 is not needed
+    av_log(NULL, AV_LOG_ERROR, "  to change time step to 65 seconds & change total width to 900:\n    %s -s 65 -w 900 infile.avi\n", gb_argv0);   
     av_log(NULL, AV_LOG_ERROR, "  to step evenly to get 3 columns x 10 rows:\n    %s -c 3 -r 10 infile.avi\n", gb_argv0);
     av_log(NULL, AV_LOG_ERROR, "  to save output files to writeable directory:\n    %s -O writeable /read/only/dir/infile.avi\n", gb_argv0);
     av_log(NULL, AV_LOG_ERROR, "  to get 2 columns in original movie size:\n    %s -c 2 -w 0 infile.avi\n", gb_argv0);
