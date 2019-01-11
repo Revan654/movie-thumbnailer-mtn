@@ -2,6 +2,7 @@
 #CFLAGS=-W -Wall `pkg-config --cflags libavformat`
 
 #DESTDIR - reserved for rpmbuild
+
 UNAME!=uname -s
 CFLAGS=-W -Wall
 OUT=../bin
@@ -18,19 +19,18 @@ endif
 
 LIBS+=-lavcodec -lavformat -lavcodec -lswscale -lavutil -lgd -lfreetype -ljpeg -lz -lm -lpthread
 S_INCPATH=-I$(LIBSDIR)/FFmpeg -I$(LIBSDIR)/libgd/src
-S_LIBS=\
-	$(LIBSDIR)/libgd.a \
-	$(LIBSDIR)/libavformat.a \
-	$(LIBSDIR)/libavcodec.a \
-	$(LIBSDIR)/libswscale.a \
-	$(LIBSDIR)/libavutil.a \
-	$(LIBSDIR)/libz.a \
-	$(LIBSDIR)/libpng.a \
-	-lm -lpthread -lbz2 -ldl -ljpeg -lfreetype
+S_LIBS= -static-libgcc -static \
+	$(LIBSDIR)/FFmpeg/libavformat/libavformat.a \
+	$(LIBSDIR)/FFmpeg/libavcodec/libavcodec.a \
+	$(LIBSDIR)/FFmpeg/libswscale/libswscale.a \
+	$(LIBSDIR)/FFmpeg/libavutil/libavutil.a \
+	$(LIBSDIR)/libgd/Bin/libgd.a \
+	$(LIBSDIR)/libgd/Bin/libgd.a \
+	-lpthread -lbz2 -lfreetype -ljpeg -lpng16 -lz -lm
 
 mtn: mtn.c outdir
 	$(CC) -o $(OUT)/mtn mtn.c $(INCPATH) $(CFLAGS) $(LIBS)
-
+	
 outdir:
 	mkdir -p $(OUT)
 
@@ -56,10 +56,15 @@ test_bin:
 test:  rebuild  mtn  test_bin
 tests: rebuilds mtns test_bin
 
+
+
 install: mtn
 	mkdir -p $(DESTDIR)/usr/bin/
 	install -m 755 $(OUT)/mtn $(DESTDIR)/usr/bin/
+	gzip --keep --force ../man/mtn.1
+	mkdir -p $(DESTDIR)/usr/share/man/man1
+	cp -p ../man/mtn.1.gz $(DESTDIR)/usr/share/man/man1/
 
 uninstall:
+	rm -f  $(DESTDIR)/usr/share/man/man1/mtn.1.gz
 	rm -f  $(DESTDIR)/usr/bin/mtn
-

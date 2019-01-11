@@ -3,7 +3,6 @@
 REM download and install MinGW into c:\Mingw from https://sourceforge.net/projects/mingw/files/
 REM download and extract ffmpeg into c:\MinGW from https://ffmpeg.zeranoe.com/builds/win32/shared/ and https://ffmpeg.zeranoe.com/builds/win32/dev/
 REM download and extract libgd (Binaries, Dependencies and Developer files) from http://gnuwin32.sourceforge.net/packages/gd.htm
-REM Ref for CFlags: https://wiki.gentoo.org/wiki/Safe_CFLAGS
 
 REM dependent libraries are located here:
 REM     c:\MinGW\bin\AVCODEC-57.DLL
@@ -22,7 +21,7 @@ REM     c:\MinGW\bin\ZLIB1.DLL
 set PATH=c:\MinGW\bin;%PATH%
 
 set CC=gcc
-set CFLAGS=-march=ivybridge -O3 -pipe
+set CFLAGS=-Wall -DWIN32 -O3
 
 set LDFLAGS=-Lc:\MinGW\lib
 set INCLUDE=-Ic:\MinGW\include

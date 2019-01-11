@@ -1,4 +1,5 @@
-# Dll & Source Files:
+# building mtn windows 32-bit version on Fedora machine:
+#   download and extract
 #     FFmpeg from https://ffmpeg.zeranoe.com/builds/win32/dev/ into mtn's lib/windows directory
 #     artifact libgd  from https://ci.appveyor.com/project/imazen/gd-libgd into mtn's lib/windows directory
 #   cd src

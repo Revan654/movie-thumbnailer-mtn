@@ -166,14 +166,14 @@ double gb_E_end = GB_E_END; // skip this seconds at the end
 #define GB_F_FONTNAME "tahomabd.ttf"
 char *gb_f_fontname = GB_F_FONTNAME;
 rgb_color gb_F_info_color = COLOR_INFO; // info color
-double gb_F_info_font_size = 9; // info font size
+double gb_F_info_font_size = 12; // info font size
 char *gb_F_ts_fontname = GB_F_FONTNAME; // time stamp fontname
 rgb_color gb_F_ts_color = COLOR_WHITE; // time stamp color
 rgb_color gb_F_ts_shadow = COLOR_BLACK; // time stamp shadow color
-double gb_F_ts_font_size = 8; // time stamp font size
+double gb_F_ts_font_size = 12; // time stamp font size
 #define GB_G_GAP 0
 int gb_g_gap = GB_G_GAP;
-#define GB_H_HEIGHT 150
+#define GB_H_HEIGHT 200
 int gb_h_height = GB_H_HEIGHT; // mininum height of each shot; will reduce # of column to meet this height
 int gb_H_human_filesize = 0; // filesize only in human readable size (KiB, MiB, GiB)
 #define GB_I_INFO 1
@@ -188,7 +188,7 @@ rgb_color gb_k_bcolor = GB_K_BCOLOR; // background color
 int gb_L_info_location = GB_L_INFO_LOCATION;
 #define GB_L_TIME_LOCATION 1
 int gb_L_time_location = GB_L_TIME_LOCATION;
-#define GB_N_NORMAL 0
+#define GB_N_NORMAL 1
 int gb_n_normal = GB_N_NORMAL; // normal priority; 1 normal; 0 lower
 #define GB_N_SUFFIX NULL
 char *gb_N_suffix = GB_N_SUFFIX; // info text file suffix
@@ -221,7 +221,7 @@ char *gb_T_text = GB_T_TEXT;
 #define GB_V_VERBOSE 0
 int gb_v_verbose = GB_V_VERBOSE; // 1 on; 0 off
 int gb_V = GB_V_VERBOSE; // 1 on; 0 off
-#define GB_W_WIDTH 1024
+#define GB_W_WIDTH 1920
 int gb_w_width = GB_W_WIDTH; // 0 = column * movie width
 #define GB_W_OVERWRITE 1
 int gb_W_overwrite = GB_W_OVERWRITE; // 1 = overwrite; 0 = dont overwrite
@@ -237,7 +237,7 @@ int gb__transparent_bg=0;		//  0 off, 1 on
 
 /* more global variables */
 char *gb_argv0 = NULL;
-char *gb_version = "2.0";
+char *gb_version = "2.1";
 time_t gb_st_start = 0; // start time of program
 
 /* misc functions */
@@ -2169,14 +2169,14 @@ int make_thumbnail(char *file)
     }
     if (1 == gb_Z_nonseek) {
         seek_mode = 0;
-        av_log(NULL, AV_LOG_INFO, "  *** using non-seek mode -- slower but more accurate timing.\n");
+        //av_log(NULL, AV_LOG_INFO, "  *** using non-seek mode -- slower but more accurate timing.\n");
     }
 
     /* decode & fill in the shots */
   restart:
     seek_mode = seek_mode; // target for restart
     if (0 == seek_mode && gb_B_begin > 10) {
-        av_log(NULL, AV_LOG_INFO, "  -B %.2f with non-seek mode will take some time.\n", gb_B_begin);
+        //av_log(NULL, AV_LOG_INFO, "  -B %.2f with non-seek mode will take some time.\n", gb_B_begin);
     }
 
     int64_t seek_target, seek_evade = 0; // in time_base unit
@@ -2201,13 +2201,13 @@ int make_thumbnail(char *file)
         if (prevshot_pts > eff_target && 0 == evade_try) {
             // restart in seek mode of skipping shots (FIXME)
             if (seek_mode == 1) {
-              av_log(NULL, AV_LOG_INFO, "  *** previous seek overshot target %s; switching to non-seek mode\n", time_tmp);
+             // av_log(NULL, AV_LOG_INFO, "  *** previous seek overshot target %s; switching to non-seek mode\n", time_tmp);
               av_seek_frame(pFormatCtx, video_index, 0, 0);
               avcodec_flush_buffers(pCodecCtx);
               seek_mode = 0;
               goto restart;
             }
-            av_log(NULL, AV_LOG_INFO, "  skipping shot at %s because of previous seek or evasions\n", time_tmp);
+           // av_log(NULL, AV_LOG_INFO, "  skipping shot at %s because of previous seek or evasions\n", time_tmp);
             idx--;
             thumb_nb--;
             goto skip_shot;
@@ -2278,7 +2278,7 @@ int make_thumbnail(char *file)
                 shot_dtime = tn.step * 30 / 500.0;
             }
             if (shot_dtime > 2 || shot_dtime * tn.column * tn.row > 120) {
-                av_log(NULL, AV_LOG_INFO, "  *** seeking off target %.2f s, increase time step or use non-seek mode.\n", found_diff);
+                //av_log(NULL, AV_LOG_INFO, "  *** seeking off target %.2f s, increase time step or use non-seek mode.\n", found_diff);
                 goto non_seek_too_long;
             }
 
@@ -2286,8 +2286,8 @@ int make_thumbnail(char *file)
             av_seek_frame(pFormatCtx, video_index, 0, 0);
             avcodec_flush_buffers(pCodecCtx);
             seek_mode = 0;
-            av_log(NULL, AV_LOG_INFO, "  *** switching to non-seek mode because seeking was off target by %.2f s.\n", found_diff);
-            av_log(NULL, AV_LOG_INFO, "  non-seek mode is slower. increase time step or use -z if you dont want this.\n");
+            //av_log(NULL, AV_LOG_INFO, "  *** switching to non-seek mode because seeking was off target by %.2f s.\n", found_diff);
+            //av_log(NULL, AV_LOG_INFO, "  non-seek mode is slower. increase time step or use -z if you dont want this.\n");
             goto restart;
         }
       non_seek_too_long:
@@ -3020,7 +3020,7 @@ void usage()
     av_log(NULL, AV_LOG_ERROR, "  -j %d : jpeg quality\n", GB_J_QUALITY);
     av_log(NULL, AV_LOG_ERROR, "  -k RRGGBB : background color (in hex)\n"); 
     av_log(NULL, AV_LOG_ERROR, "  -L info_location[:time_location] : location of text\n     1=lower left, 2=lower right, 3=upper right, 4=upper left\n");
-    av_log(NULL, AV_LOG_ERROR, "  -n : run at normal priority\n");
+    av_log(NULL, AV_LOG_ERROR, "  -n : run at below normal priority\n");
     av_log(NULL, AV_LOG_ERROR, "  -N info_suffix : save info text to a file with suffix\n");
     av_log(NULL, AV_LOG_ERROR, "  -o %s : output suffix including image extension (.jpg or .png)\n", GB_O_SUFFIX);
     av_log(NULL, AV_LOG_ERROR, "  -O directory : save output files in the specified directory\n");
