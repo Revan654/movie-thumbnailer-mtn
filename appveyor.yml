@@ -1,0 +1,34 @@
+version: 2.0.{build}
+image: Ubuntu1804
+clone_folder: /home
+init:
+- cmd: curl --output /home/sample.avi -L "https://bitbucket.org/wahibre/mtn/downloads/sample.avi"
+install:
+- cmd: >-
+    apt-get -y update
+
+    apt-get -y install curl make libgd-dev libavutil-dev libavcodec-dev libavformat-dev libswscale-dev
+build_script:
+- cmd: >-
+    pushd src
+
+    make test
+
+    popd
+
+    mkdir -p builddeb/rootdirectory/usr/{bin,share/man/man1}
+
+    mv bin/mtn builddeb/rootdirectory/usr/bin/
+
+    gzip man/mtn.1
+
+    mv man/mtn.1* builddeb/rootdirectory/usr/share/man/man1
+
+    cd builddeb
+
+    chmod -R 755 rootdirectory
+
+    mv mtn*.deb ../
+artifacts:
+- path: ./*.deb
+  name: MTN-Linux
